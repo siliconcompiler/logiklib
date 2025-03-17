@@ -1,4 +1,4 @@
-__version__ = "0.0.0"
+__version__ = "0.1.0"
 
 
 def register_part_data(fpga, part_name, package_name):
