@@ -1,0 +1,20 @@
+# Editor files
+*~
+*.log
+tmp*
+*.out
+*.q
+*.key
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Compiled object and binary files
+*.o
+*.bin
+*.dump
+*.elf
+*.map
+*.egg-info
+*.vpi
+.venv/

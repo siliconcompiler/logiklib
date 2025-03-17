@@ -1,0 +1,15 @@
+{
+    "name": "z1000",
+    "fpga_x_size": 16,
+    "fpga_y_size": 16,
+    "num_routing_channels": 100,
+    "num_clb_inputs": 18,
+    "lut_size": 4,
+    "bles_per_clb": 8,
+    "outputs_per_ble": 1,
+    "crossbar_size": 15,
+    "sb_fraction": 0.15,
+    "logic_fraction": 0.15,
+    "ios_per_iob": 16,
+    "num_fracturable_elements": 1
+}

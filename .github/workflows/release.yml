@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  forward_artifacts:
+    name: Forward artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get previous artifacts
+      run: |
+        prev=$(gh release list --repo ${{ github.repository }} --order desc --limit 2 --json name --jq '.[].name' | tail -n1)
+        mkdir artifacts
+        gh release download --repo ${{ github.repository }} $prev --dir artifacts
+        rm -f artifacts/*.whl
+
+    - name: Upload to new release
+      run: |
+        gh release upload ${{ github.ref }} artifacts/* --repo ${{ github.repository }}

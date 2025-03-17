@@ -1,0 +1,36 @@
+name: Basic CI
+on:
+  # Runs on all PRs
+  pull_request:
+  # Manual Dispatch
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  python_ci:
+    name: "Python CI"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: pytest
+        env:
+          GIT_TOKEN: ${{ secrets.ZA_TOKEN }}
+        run: |
+          python3 -m venv .venv
+          . .venv/bin/activate
+
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -e .[test]
+
+          mkdir testingdir
+          cd testingdir
+
+          pytest ../tests

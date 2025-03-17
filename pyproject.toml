@@ -1,0 +1,38 @@
+[build-system]
+requires = [
+    "setuptools >= 61.2",
+    "setuptools_scm[toml] >= 6.2"
+]
+
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+packages = [
+    "logiklib"
+]
+
+[project]
+name = "logiklib"
+authors = [{name = "Zero ASIC"}]
+description = "Library of FPGA architectures"
+readme = "README.md"
+urls = {Homepage = "https://github.com/siliconcompiler/logiklib.git"}
+requires-python = ">= 3.8"
+license = {file = "LICENSE"}
+dynamic = [
+    "version"
+]
+dependencies = [
+    "siliconcompiler >= 0.32.1"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "logiklib.__version__"}
+
+[project.optional-dependencies]
+test = [
+    "pytest==8.3.5",
+    "flake8==7.1.2",
+    "codespell==2.4.1"
+]
