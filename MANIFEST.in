@@ -1,1 +1,2 @@
 global-exclude *.png
+global-exclude *.json
