@@ -21,7 +21,7 @@ The following sections summarize the architecture features of Z1012.
 
 ### Array and Grid Model
 
-Z1012 logic resources are organized into an 34x34 array of components, depicted in the figure below.  A 32x32 array of logic blocks is surrounded on the perimeter by four banks of IOBs, one per side of the array.  One column of logic blocks is consumed by four DSP blocks.  Four block RAMs (BRAMs) consume an additonal two columns.  Corner array locations are used for programmable interconnect only with the exception of the lower left corner, where a special IOB for delivering clocks is placed.
+Z1012 logic resources are organized into an 34x34 array of components, depicted in the figure below.  A 32x32 array of logic blocks is surrounded on the perimeter by four banks of IOBs, one per side of the array.  One column of logic blocks is consumed by four DSP blocks.  Four block RAMs (BRAMs) consume an additional two columns.  Corner array locations are used for programmable interconnect only with the exception of the lower left corner, where a special IOB for delivering clocks is placed.
 
 ![z1012_array_diagram](./docs/z1012_Block_Diagram.png )
 
