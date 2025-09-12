@@ -47,7 +47,7 @@ Each DSP block consists of one configurable arithmetic circuit whose operating m
 
 A block diagram of the DSP block is shown below.  Three data inputs, a clock, and an asynchronous reset signal are provided.  All inputs may optionally be re-registered; synthesis software infers when these registers should be used.  Two of the three inputs serve primarily as inputs to an 18x18 multiplier; however, they may also be routed to an adder circuit to use the block only for wide addition operations.  These two inputs are 18 bits wide.  A third 40-bit input is provided to enable fused multiply-add operations.  Additional operating modes enable the block to function as an accumulator or a multiply-accumulator.  For high-performance DSP, the multiply-accumulator mode may optionally be pipelined; users must model this pipelining in their HDL code to ensure correct inference.
 
-![dsp_block_diagram](./docs/DSP_Block_Diagram.png )
+![dsp_block_diagram](../z1010/docs/DSP_Block_Diagram.png )
 
 #### BRAM
 
@@ -68,7 +68,7 @@ BRAM modes are selected via bitstream configuration.  Users write HDL code that 
 
 A block diagram of the BRAM is shown below.  The BRAM has dedicated I/O interfaces for two complete SRAM ports.  Note that not all signals may be used in all modes.  Dedicated signals are provided for clock enable, read enable, write enable, and byte enables in addition to the signaling for clock, address, and data.   Depending on HDL coding styles chosen, users may include or exclude clock enable, read enable, and/or byte enables signals from their designs and rely on synthesis software to connect them to constant values that ensure user functionality is preserved.
 
-![bram_block_diagram](./docs/BRAM_Block_Diagram.png )
+![bram_block_diagram](../z1010/docs/BRAM_Block_Diagram.png )
 
 #### I/O Block (IOB)
 
