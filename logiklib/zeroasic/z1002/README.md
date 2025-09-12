@@ -21,7 +21,7 @@ The following sections summarize the architecture features of Z1002.
 
 Z1002 logic resources are organized into an 34x34 array of components, depicted in the figure below.  A 32x32 array of CLBs is surrounded on the perimeter by four banks of IOBs, one per side of the array.  Corner array locations are used for programmable interconnect only with the exception of the lower left corner, where the clock IOB is placed.
 
-![z1002_array_diagram](./z1002_Block_Diagram.png )
+![z1002_array_diagram](./docs/z1002_Block_Diagram.png )
 
 For modeling in VPR, this array of components is arranged on a 36x36 (X,Y) grid.  The lower left corner of Z1002 (the clock IOB) is located at (1,1) on this grid.  All locations at X=0, X=19, Y=0, and Y=19 are modeled as empty.  This perimeter of empty locations is required to model the architecture in VPR correctly.
 
@@ -33,11 +33,11 @@ Brief descriptions and block diagrams for Z1002 logic resources are shown below.
 
 Each configurable logic block (CLB) consists of 8 4-input basic logic elements (BLEs).  A block diagram of the BLE is shown below.  The BLE contains a 4-input lookup table (LUT) a configurable flip-flop, and a multiplexer that selects whether the primary output of the BLE comes from the flip-flop or directly from the LUT.  The flip-flop output is also routed out of the BLE as a secondary output; this secondary output is connected only to local interconnect in the CLB.
 
-![ble_block_diagram](./BLE4_Block_Diagram.png )
+![ble_block_diagram](../z1000/docs/BLE4_Block_Diagram.png )
 
 The BLEs in a CLB share 18 common inputs through the CLB local interconnect, an array of multiplexers referred to as the CLB crossbar.  Each BLE input is driven by a dedicated crossbar multiplexer that selects from a subset of the CLB inputs, BLE primary outputs, and BLE secondary outputs.  The CLB inputs are subdivided between north, south, east, and west sides of the CLB to improve their interface to the eFPGA global interconnect.  The BLE primary outputs are also outputs of the CLB and route directly to eFPGA global interconnect.  The overall CLB block diagram is shown below.  The BLE output feedback paths to the crossbar are not shown in the diagram to preserve diagram clarity.
 
-![clb_block_diagram](./CLB4_Block_Diagram.png)
+![clb_block_diagram](../z1000/docs/CLB4_Block_Diagram.png)
 
 #### I/O Block (IOB)
 
@@ -45,7 +45,7 @@ General purpose I/O blocks (IOBs) are provided to provide a consistent signal in
 
 The figure below shows a block diagram of the iopad primitive.  Each iopad enables a single signal to be connected .  The data direction is determined during bitstream generation and stored in a configuration bit that is directly wired to an output enable signal pad_oe that is accessible as a top level signal of the eFPGA.  When in input mode, the pad_in signal is received from external logic and passed to eFPGA logic via the inpad signal.  Similarly, in output mode the outpad signal is received from eFPGA logic and passed to pad_out.
 
-![iob_block_diagram](./IOB_Block_Diagram.png)
+![iob_block_diagram](../z1000/docs/IOB_Block_Diagram.png)
 
 #### Clock I/O Block (Clock IOB)
 
