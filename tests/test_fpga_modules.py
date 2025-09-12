@@ -9,13 +9,23 @@ from logiklib.demo.K4_N8_6x6 import K4_N8_6x6
 from logiklib.demo.K6_N8_12x12_BD import K6_N8_12x12_BD
 from logiklib.demo.K6_N8_28x28_BD import K6_N8_28x28_BD
 from logiklib.zeroasic.z1000 import z1000
+from logiklib.zeroasic.z1002 import z1002
+from logiklib.zeroasic.z1010 import z1010
+from logiklib.zeroasic.z1012 import z1012
+from logiklib.zeroasic.z1060 import z1060
+from logiklib.zeroasic.z1062 import z1062
 
 
 all_modules = (K6_N8_3x3,
                K4_N8_6x6,
                K6_N8_12x12_BD,
                K6_N8_28x28_BD,
-               z1000)
+               z1000,
+               z1002,
+               z1010,
+               z1012,
+               z1060,
+               z1062)
 
 
 def test_all_modules():
