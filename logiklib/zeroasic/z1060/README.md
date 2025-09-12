@@ -35,7 +35,7 @@ Brief descriptions and block diagrams for Z1060 logic resources are shown below.
 
 Each configurable logic block (CLB) consists of 8 6-input basic logic elements (BLEs).  A block diagram of the BLE is shown below.  The BLE contains a 6-input lookup table (LUT) a configurable flip-flop, and a multiplexer that selects whether the primary output of the BLE comes from the flip-flop or directly from the LUT.  The flip-flop output is also routed out of the BLE as a secondary output; this secondary output is connected only to local interconnect in the CLB.
 
-![ble_block_diagram](../z1000/docs/BLE4_Block_Diagram.png )
+![ble_block_diagram](../z1060/docs/BLE6_Block_Diagram.png )
 
 The BLEs in a CLB share 24 common inputs through the CLB local interconnect, an array of multiplexers referred to as the CLB crossbar.  Each BLE input is driven by a dedicated crossbar multiplexer that selects from a subset of the CLB inputs, BLE primary outputs, and BLE secondary outputs.  The CLB inputs are subdivided between north, south, east, and west sides of the CLB to improve their interface to the eFPGA global interconnect.  The BLE primary outputs are also outputs of the CLB and route directly to eFPGA global interconnect.  The overall CLB block diagram is shown below.  The BLE output feedback paths to the crossbar are not shown in the diagram to preserve diagram clarity.
 
