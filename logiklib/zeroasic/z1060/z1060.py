@@ -21,7 +21,7 @@ class z1060(YosysFPGA, VPRFPGA, OpenSTAFPGA):
 
         self.define_tool_parameter('convert_bitstream', 'bitstream_map', 'file',
                                    'bitstream map')
-        
+
         register_part_data(self, "logik-fpga-z1060", 'z1060')
 
         self.package.set_vendor("fpga_architect")
