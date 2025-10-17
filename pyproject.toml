@@ -24,7 +24,7 @@ dynamic = [
     "version"
 ]
 dependencies = [
-    "siliconcompiler >= 0.32.1"
+    "siliconcompiler >= 0.35.1"
 ]
 
 [tool.setuptools.dynamic]

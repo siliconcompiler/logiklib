@@ -48,8 +48,8 @@ def test_all_modules():
     assert set(found_modules) == set([mod.__file__ for mod in all_modules])
 
 
-@pytest.mark.skip(reason="this test doesn't appear to check anything")
 @pytest.mark.parametrize("part", all_parts)
 def test_filepaths(part):
     fpga = part()
-    fpga.check_filepaths()
+
+    assert fpga.name == fpga.__class__.__name__
