@@ -1,61 +1,143 @@
-# Copyright 2025 Zero ASIC Corporation
-# Licensed under the Apache 2.0 License (see LICENSE for details)
+
+from siliconcompiler.tools.vpr import VPRFPGA
+from siliconcompiler.tools.yosys import YosysFPGA
+from siliconcompiler.tools.opensta import OpenSTAFPGA
 
 from logiklib import register_part_data
-
-from siliconcompiler import FPGA
 
 
 ####################################################
 # Setup for z1000 FPGA
 ####################################################
-def setup():
+
+class z1000(YosysFPGA, VPRFPGA, OpenSTAFPGA):
     '''
-    z1000 is the first in a series of open FPGA architectures.
-    The baseline z1000 part is an architecture with 2K LUTs
-    and no hard macros.
+    Logik driver for z1000
     '''
 
-    part_name = 'z1000'
+    def __init__(self):
+        super().__init__()
+        self.set_name('z1000')
 
-    fpga = FPGA(part_name, package=f"zeroasic-efpga-{part_name}")
+        self.define_tool_parameter('convert_bitstream', 'bitstream_map', 'file',
+                                   'bitstream map')
 
-    register_part_data(fpga, part_name, f"zeroasic-efpga-{part_name}")
+        register_part_data(self, "logik-fpga-z1000", 'z1000')
 
-    fpga.set('fpga', part_name, 'vendor', 'zeroasic')
+        self.package.set_vendor("fpga_architect")
 
-    # Set a variable for VPR to use to detect the correct <fixed_layout> section
-    # of the architecture XML file
-    fpga.set('fpga', part_name, 'var', 'vpr_device_code', part_name)
+        self.set_vpr_devicecode("z1000")
 
-    fpga.set('fpga', part_name, 'lutsize', 4)
-    fpga.set('fpga', part_name, 'var', 'feature_set', [
-        'async_reset', 'enable'])
+        self.set_lutsize(4)
+        yosys_featureset = []
+        yosys_featureset.append("async_reset")
+        yosys_featureset.append("enable")
 
-    fpga.set('fpga', part_name, 'var', 'vpr_clock_model', 'route')
+        self.add_yosys_featureset(yosys_featureset)
+        self.set_vpr_clockmodel("route")
 
-    fpga.set('fpga', part_name, 'file', 'archfile',  f'cad/{part_name}.xml')
-    fpga.set('fpga', part_name, 'file', 'graphfile', f'cad/{part_name}_rr_graph.xml')
+        with self.active_dataroot("logik-fpga-z1000"):
+            self.set_vpr_archfile('cad/z1000.xml')
+            self.set_vpr_graphfile('cad/z1000_rr_graph.xml')
+            self.set_yosys_config('cad/z1000_yosys_config.json')
+            self.set_yosys_flipfloptechmap('cad/tech_flops.v')
 
-    for tool in ('vpr', 'yosys'):
-        fpga.set('fpga', part_name, 'var', f'{tool}_registers', [
-            'dff',
-            'dffr',
-            'dffe',
-            'dffer'])
+        # Define the macros that can be techmapped to based on the modes
+        # that exist in the design
+        self.add_yosys_registertype(['dff', 'dffe', 'dffer', 'dffr'])
+        self.add_vpr_registertype(['dff', 'dffe', 'dffer', 'dffr'])
 
-    fpga.set('fpga', part_name, 'file', 'yosys_flop_techmap', 'techlib/tech_flops.v')
+        self.add_yosys_dsptype(['dsp_mult',
+                                'efpga_acc',
+                                'efpga_acc_regi',
+                                'efpga_adder',
+                                'efpga_adder_regi',
+                                'efpga_adder_regio',
+                                'efpga_adder_rego',
+                                'efpga_macc',
+                                'efpga_macc_pipe',
+                                'efpga_macc_pipe_regi',
+                                'efpga_macc_regi',
+                                'efpga_mult',
+                                'efpga_mult_addc',
+                                'efpga_mult_addc_regi',
+                                'efpga_mult_addc_regio',
+                                'efpga_mult_addc_rego',
+                                'efpga_mult_regi',
+                                'efpga_mult_regio',
+                                'efpga_mult_rego'])
+        self.add_vpr_dsptype(['dsp_mult',
+                              'efpga_acc',
+                              'efpga_acc_regi',
+                              'efpga_adder',
+                              'efpga_adder_regi',
+                              'efpga_adder_regio',
+                              'efpga_adder_rego',
+                              'efpga_macc',
+                              'efpga_macc_pipe',
+                              'efpga_macc_pipe_regi',
+                              'efpga_macc_regi',
+                              'efpga_mult',
+                              'efpga_mult_addc',
+                              'efpga_mult_addc_regi',
+                              'efpga_mult_addc_regio',
+                              'efpga_mult_addc_rego',
+                              'efpga_mult_regi',
+                              'efpga_mult_regio',
+                              'efpga_mult_rego'])
 
-    fpga.set('fpga', part_name, 'file', 'bitstream_map', f'cad/{part_name}_bitstream_map.json')
+        self.add_yosys_bramtype(['sdpram_1024x1',
+                                 'sdpram_128x8',
+                                 'sdpram_256x4',
+                                 'sdpram_512x2',
+                                 'spram_1024x1',
+                                 'spram_128x8',
+                                 'spram_256x4',
+                                 'spram_512x2',
+                                 'spram_64x16',
+                                 'sram_sdp',
+                                 'sram_sp',
+                                 'sram_tdp',
+                                 'tdpram_1024x1',
+                                 'tdpram_128x8',
+                                 'tdpram_256x4',
+                                 'tdpram_512x2'])
+        self.add_vpr_bramtype(['sdpram_1024x1',
+                               'sdpram_128x8',
+                               'sdpram_256x4',
+                               'sdpram_512x2',
+                               'spram_1024x1',
+                               'spram_128x8',
+                               'spram_256x4',
+                               'spram_512x2',
+                               'spram_64x16',
+                               'sram_sdp',
+                               'sram_sp',
+                               'sram_tdp',
+                               'tdpram_1024x1',
+                               'tdpram_128x8',
+                               'tdpram_256x4',
+                               'tdpram_512x2'])
 
-    fpga.set('fpga', part_name, 'file', 'constraints_map', f'cad/{part_name}_constraint_map.json')
+        # TODO: blackbox_options
 
-    fpga.set('fpga', part_name, 'var', 'channelwidth', 100)
+        with self.active_dataroot("logik-fpga-z1000"):
+            self.set("tool", "convert_bitstream", "bitstream_map", 'cad/z1000_bitstream_map.json')
+            self.set_vpr_constraintsmap('cad/z1000_constraint_map.json')
 
-    return fpga
+        self.set_vpr_channelwidth(100)
+
+        with self.active_dataroot("logik-fpga-z1000"):
+            with self.active_fileset("z1000_opensta_liberty_files"):
+                self.add_file('cad/vtr_primitives.lib')
+                self.add_file(['cad/tech_flops.lib'])
+                self.add_opensta_liberty_fileset()
+
+        self.set_vpr_router_lookahead('classic')
 
 
 #########################
 if __name__ == "__main__":
-    fpga = setup()
+    fpga = z1000
+    assert fpga.check_filepaths()
     fpga.write_manifest(f'{fpga.design}.json')

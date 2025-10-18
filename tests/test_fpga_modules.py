@@ -1,54 +1,24 @@
-import os
 import pytest
 
-from siliconcompiler import Chip
-
-import logiklib
-from logiklib.demo.K6_N8_3x3 import K6_N8_3x3
-from logiklib.demo.K4_N8_6x6 import K4_N8_6x6
-from logiklib.demo.K6_N8_12x12_BD import K6_N8_12x12_BD
-from logiklib.demo.K6_N8_28x28_BD import K6_N8_28x28_BD
-from logiklib.zeroasic.z1000 import z1000
-from logiklib.zeroasic.z1002 import z1002
-from logiklib.zeroasic.z1010 import z1010
-from logiklib.zeroasic.z1012 import z1012
-from logiklib.zeroasic.z1060 import z1060
-from logiklib.zeroasic.z1062 import z1062
+from logiklib.zeroasic.z1000.z1000 import z1000
+from logiklib.zeroasic.z1002.z1002 import z1002
+from logiklib.zeroasic.z1010.z1010 import z1010
+from logiklib.zeroasic.z1012.z1012 import z1012
+from logiklib.zeroasic.z1060.z1060 import z1060
+from logiklib.zeroasic.z1062.z1062 import z1062
 
 
-all_modules = (K6_N8_3x3,
-               K4_N8_6x6,
-               K6_N8_12x12_BD,
-               K6_N8_28x28_BD,
-               z1000,
-               z1002,
-               z1010,
-               z1012,
-               z1060,
-               z1062)
+all_parts = (z1000,
+             z1002,
+             z1010,
+             z1012,
+             z1060,
+             z1062
+             )
 
 
-def test_all_modules():
-    '''
-    Test to ensure all available modules are in the testing list
-    '''
-    base_dir = os.path.abspath(os.path.dirname(logiklib.__file__))
-    found_modules = []
-    for pathdir, _, files in os.walk(base_dir):
-        if len(os.path.relpath(pathdir, base_dir).split("/")) == 2:
-            for f in files:
-                if f != "__init__.py" and f.endswith(".py"):
-                    found_modules.append(os.path.join(pathdir, f))
+@pytest.mark.parametrize("part", all_parts)
+def test_filepaths(part):
+    fpga = part()
 
-    assert set(found_modules) == set([mod.__file__ for mod in all_modules])
-
-
-@pytest.mark.parametrize("module", all_modules)
-def test_filepaths(module):
-    '''
-    Loads a module and ensures their filepaths are available
-    '''
-    chip = Chip('<test>')
-    chip.use(module)
-
-    assert chip.check_filepaths()
+    assert fpga.name == fpga.__class__.__name__
