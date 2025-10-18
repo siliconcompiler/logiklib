@@ -37,10 +37,10 @@ class z1000(YosysFPGA, VPRFPGA, OpenSTAFPGA):
         self.set_vpr_clockmodel("route")
 
         with self.active_dataroot("logik-fpga-z1000"):
-            self.set_vpr_archfile('cad/z1000.xml')
-            self.set_vpr_graphfile('cad/z1000_rr_graph.xml')
-            self.set_yosys_config('cad/z1000_yosys_config.json')
-            self.set_yosys_flipfloptechmap('cad/tech_flops.v')
+            self.set_vpr_archfile('z1000/cad/z1000.xml')
+            self.set_vpr_graphfile('z1000/cad/z1000_rr_graph.xml')
+            self.set_yosys_config('z1000/cad/z1000_yosys_config.json')
+            self.set_yosys_flipfloptechmap('z1000/cad/tech_flops.v')
 
         # Define the macros that can be techmapped to based on the modes
         # that exist in the design
@@ -122,15 +122,15 @@ class z1000(YosysFPGA, VPRFPGA, OpenSTAFPGA):
         # TODO: blackbox_options
 
         with self.active_dataroot("logik-fpga-z1000"):
-            self.set("tool", "convert_bitstream", "bitstream_map", 'cad/z1000_bitstream_map.json')
-            self.set_vpr_constraintsmap('cad/z1000_constraint_map.json')
+            self.set("tool", "convert_bitstream", "bitstream_map", 'z1000/cad/z1000_bitstream_map.json')
+            self.set_vpr_constraintsmap('z1000/cad/z1000_constraint_map.json')
 
         self.set_vpr_channelwidth(100)
 
         with self.active_dataroot("logik-fpga-z1000"):
             with self.active_fileset("z1000_opensta_liberty_files"):
-                self.add_file('cad/vtr_primitives.lib')
-                self.add_file(['cad/tech_flops.lib'])
+                self.add_file('z1000/cad/vtr_primitives.lib')
+                self.add_file(['z1000/cad/tech_flops.lib'])
                 self.add_opensta_liberty_fileset()
 
         self.set_vpr_router_lookahead('classic')
