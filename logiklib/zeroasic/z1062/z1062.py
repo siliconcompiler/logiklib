@@ -37,13 +37,13 @@ class z1062(YosysFPGA, VPRFPGA, OpenSTAFPGA):
         self.set_vpr_clockmodel("route")
 
         with self.active_dataroot("logik-fpga-z1062"):
-            self.set_vpr_archfile('cad/z1062.xml')
-            self.set_vpr_graphfile('cad/z1062_rr_graph.xml')
-            self.set_yosys_config('cad/z1062_yosys_config.json')
-            self.set_yosys_flipfloptechmap('cad/tech_flops.v')
-            self.set_yosys_memorymap(techmap='cad/tech_bram.v')
-            self.set_yosys_memorymap(libmap='cad/bram_memory_map.txt')
-            self.set_yosys_dsptechmap('cad/tech_dsp.v',
+            self.set_vpr_archfile('z1062/cad/z1062.xml')
+            self.set_vpr_graphfile('z1062/cad/z1062_rr_graph.xml')
+            self.set_yosys_config('z1062/cad/z1062_yosys_config.json')
+            self.set_yosys_flipfloptechmap('z1062/cad/tech_flops.v')
+            self.set_yosys_memorymap(techmap='z1062/cad/tech_bram.v')
+            self.set_yosys_memorymap(libmap='z1062/cad/bram_memory_map.txt')
+            self.set_yosys_dsptechmap('z1062/cad/tech_dsp.v',
                                       options={'DSP_SIGNEDONLY': '1',
                                                'DSP_A_MAXWIDTH': '18',
                                                'DSP_B_MAXWIDTH': '18',
@@ -51,7 +51,7 @@ class z1062(YosysFPGA, VPRFPGA, OpenSTAFPGA):
                                                'DSP_B_MINWIDTH': '2',
                                                'DSP_Y_MINWIDTH': '2',
                                                'DSP_NAME': '_dsp_block_'})
-            self.add_yosys_macrolib('cad/tech_dsp_blackbox.v')
+            self.add_yosys_macrolib('z1062/cad/tech_dsp_blackbox.v')
 
         # Define the macros that can be techmapped to based on the modes
         # that exist in the design
@@ -169,15 +169,15 @@ class z1062(YosysFPGA, VPRFPGA, OpenSTAFPGA):
         # TODO: blackbox_options
 
         with self.active_dataroot("logik-fpga-z1062"):
-            self.set("tool", "convert_bitstream", "bitstream_map", 'cad/z1062_bitstream_map.json')
-            self.set_vpr_constraintsmap('cad/z1062_constraint_map.json')
+            self.set("tool", "convert_bitstream", "bitstream_map", 'z1062/cad/z1062_bitstream_map.json')
+            self.set_vpr_constraintsmap('z1062/cad/z1062_constraint_map.json')
 
         self.set_vpr_channelwidth(150)
 
         with self.active_dataroot("logik-fpga-z1062"):
             with self.active_fileset("z1062_opensta_liberty_files"):
-                self.add_file('cad/vtr_primitives.lib')
-                self.add_file(['cad/tech_flops.lib', 'cad/tech_dsp.lib', 'cad/tech_bram.lib'])
+                self.add_file('z1062/cad/vtr_primitives.lib')
+                self.add_file(['z1062/cad/tech_flops.lib', 'z1062/cad/tech_dsp.lib', 'z1062/cad/tech_bram.lib'])
                 self.add_opensta_liberty_fileset()
 
         self.set_vpr_router_lookahead('classic')
