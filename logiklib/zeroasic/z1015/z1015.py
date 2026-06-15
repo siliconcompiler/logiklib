@@ -4,6 +4,8 @@
 
 from logik.devices.logik_fpga import LogikFPGA
 
+from logiklib import register_part_data
+
 import os.path
 
 
@@ -38,14 +40,14 @@ class z1015(LogikFPGA):
         self.set_vpr_clockmodel("route")
 
         with self.active_dataroot("logik-fpga-z1015"):
-            self.set_vpr_archfile('z1015.xml')
-            self.set_vpr_graphfile('z1015_rr_graph.xml')
-            self.set_yosys_config('z1015_yosys_config.json')
-            self.set_yosys_flipfloptechmap('tech_flops.v')
-            self.set_yosys_memorymap(techmap='tech_bram.v')
-            self.set_yosys_memorymap(libmap='bram_memory_map.txt')
-            self.set_yosys_dsptechmap('tech_dsp.v', options=['DSP_SIGNEDONLY=1', 'DSP_A_MAXWIDTH=18', 'DSP_B_MAXWIDTH=18', 'DSP_A_MINWIDTH=2', 'DSP_B_MINWIDTH=2', 'DSP_Y_MINWIDTH=2', 'DSP_NAME=_dsp_block_'])
-            self.add_yosys_macrolib('tech_dsp_blackbox.v')
+            self.set_vpr_archfile('z1015/cad/z1015.xml')
+            self.set_vpr_graphfile('z1015/cad/z1015_rr_graph.xml')
+            self.set_yosys_config('z1015/cad/z1015_yosys_config.json')
+            self.set_yosys_flipfloptechmap('z1015/cad/tech_flops.v')
+            self.set_yosys_memorymap(techmap='z1015/cad/tech_bram.v')
+            self.set_yosys_memorymap(libmap='z1015/cad/bram_memory_map.txt')
+            self.set_yosys_dsptechmap('z1015/cad/tech_dsp.v', options=['DSP_SIGNEDONLY=1', 'DSP_A_MAXWIDTH=18', 'DSP_B_MAXWIDTH=18', 'DSP_A_MINWIDTH=2', 'DSP_B_MINWIDTH=2', 'DSP_Y_MINWIDTH=2', 'DSP_NAME=_dsp_block_'])
+            self.add_yosys_macrolib('z1015/cad/tech_dsp_blackbox.v')
 
         # Define the macros that can be techmapped to based on the modes
         # that exist in the design
@@ -61,15 +63,15 @@ class z1015(LogikFPGA):
         # TODO: blackbox_options
 
         with self.active_dataroot("logik-fpga-z1015"):
-            self.set_convert_bitstream_bitstream_map('z1015_bitstream_map.json')
-            self.set_vpr_constraintsmap('z1015_constraint_map.json')
+            self.set_convert_bitstream_bitstream_map('z1015/cad/z1015_bitstream_map.json')
+            self.set_vpr_constraintsmap('z1015/cad/z1015_constraint_map.json')
 
         self.set_vpr_channelwidth(150)
 
         with self.active_dataroot("logik-fpga-z1015"):
             with self.active_fileset("z1015_opensta_liberty_files"):
-                self.add_file('vtr_primitives.lib')
-                self.add_file(['tech_flops.lib', 'tech_dsp.lib', 'tech_bram.lib'])
+                self.add_file('z1015/cad/vtr_primitives.lib')
+                self.add_file(['z1015/cad/tech_flops.lib', 'z1015/cad/tech_dsp.lib', 'z1015/cad/tech_bram.lib'])
                 self.add_opensta_liberty_fileset()
 
         self.set_vpr_router_lookahead('classic')
