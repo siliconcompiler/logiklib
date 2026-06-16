@@ -66,7 +66,10 @@ class z1015(LogikFPGA):
             self.set_convert_bitstream_bitstream_map('z1015/cad/z1015_bitstream_map.json')
             self.set_vpr_constraintsmap('z1015/cad/z1015_constraint_map.json')
 
-        self.set_vpr_channelwidth(150)
+        # 150 signal channels + 4 dedicated clock tracks (clock_track_sharing=shared,
+        # clocks_per_clock_iob=4). The dedicated clock CHANX/CHANY wires occupy ptc
+        # 150..153, isolated from the signal routing channels.
+        self.set_vpr_channelwidth(154)
 
         with self.active_dataroot("logik-fpga-z1015"):
             with self.active_fileset("z1015_opensta_liberty_files"):
@@ -74,7 +77,32 @@ class z1015(LogikFPGA):
                 self.add_file(['z1015/cad/tech_flops.lib', 'z1015/cad/tech_dsp.lib', 'z1015/cad/tech_bram.lib'])
                 self.add_opensta_liberty_fileset()
 
-        self.set_vpr_router_lookahead('classic')
+
+def configure_vpr(project):
+    """Apply z1015-specific VPR task configuration.
+
+    These settings are task-scoped, and the FPGA device schema cannot carry task
+    settings, so they live here as a helper rather than in the z1015 class. Call
+    after ``project.set_flow(...)`` so the VPR tasks exist.
+
+    Disable VPR's placement/routing graphics dump
+    (``--graphics_commands ... save_graphics``). VPR's
+    ``get_unique_pb_graph_node_id`` null-derefs on z1015's clock-only
+    pb_graph_node while laying out the image, segfaulting in BOTH the place and
+    route steps, so disable image generation on both.
+
+    NOTE: the placement-delay-model workaround (forcing a dijkstra-built DELTA
+    model) is no longer needed. With the dedicated clock routing tracks now in
+    the architecture, the clock OPINs reach real dedicated CHANX/CHANY wires, so
+    VPR's ``map`` lookahead + default (fast, ~0.01s) SIMPLE delay model produce
+    finite clock delays and place correctly with no negative-criticality abort.
+    """
+    from siliconcompiler.tools.vpr.place import PlaceTask
+    from siliconcompiler.tools.vpr.route import RouteTask
+
+    # Disable the graphics dump on both VPR steps that emit save_graphics.
+    for task_cls in (PlaceTask, RouteTask):
+        task_cls.find_task(project=project).set("var", "enable_images", False)
 
 
 #########################
