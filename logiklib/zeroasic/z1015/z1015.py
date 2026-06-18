@@ -24,7 +24,8 @@ class z1015(LogikFPGA):
 
         self.define_tool_parameter('convert_bitstream', 'bitstream_map', 'file',
                                    'bitstream map')
-        self.set_dataroot("logik-fpga-z1015", os.path.dirname(__file__))
+
+        register_part_data(self, "logik-fpga-z1015", 'z1015')
 
         self.package.set_vendor("fpga_architect")
 
