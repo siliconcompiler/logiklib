@@ -9,6 +9,8 @@ jobs:
   forward_artifacts:
     name: Forward artifacts
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
 
     steps:
     - name: Get previous artifacts
@@ -20,4 +22,4 @@ jobs:
 
     - name: Upload to new release
       run: |
-        gh release upload ${{ github.ref }} artifacts/* --repo ${{ github.repository }}
+        gh release upload ${{ github.ref_name }} artifacts/* --repo ${{ github.repository }}
