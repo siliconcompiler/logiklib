@@ -6,25 +6,37 @@ on:
     types:
       - published
 
+# The repository default is write-all; start from nothing and let each job
+# opt into the single scope it needs.
+permissions: {}
+
 jobs:
   build_wheels:
     name: Wheels
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
     - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - uses: hynek/build-and-inspect-python-package@v2
 
-  publish:
+  publish_pypi:
+    name: Publish to PyPI
     needs: [build_wheels]
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
 
+    # Trusted publishing mints an OIDC token; nothing here touches the repo.
     permissions:
-      contents: write
       id-token: write
 
     steps:
+      # Same-run artifacts come from the Actions runtime token, so this needs
+      # no GITHUB_TOKEN scope of its own.
       - uses: actions/download-artifact@v8
         with:
           name: Packages
@@ -32,7 +44,23 @@ jobs:
 
       - uses: pypa/gh-action-pypi-publish@v1.14.2
 
-      - name: Add wheels to GitHub release artifacts
-        uses: softprops/action-gh-release@v3
+  upload_release:
+    name: Add wheels to GitHub release artifacts
+    needs: [publish_pypi]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    # Split out from the PyPI job so the publish action never holds a token
+    # that can write to the repository.
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: Packages
+          path: dist
+
+      - uses: softprops/action-gh-release@v3
         with:
           files: dist/*.whl

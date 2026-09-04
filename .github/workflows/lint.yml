@@ -5,6 +5,10 @@ on:
   push:
     branches: main
 
+# The repository default is write-all; linting reads.
+permissions:
+  contents: read
+
 jobs:
   lint_python:
     name: Lint Python Code
