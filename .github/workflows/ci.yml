@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+# The repository default is write-all; nothing here writes.
+permissions:
+  contents: read
+
 jobs:
 
   python_ci:
@@ -22,7 +26,11 @@ jobs:
 
       - name: pytest
         env:
-          GIT_TOKEN: ${{ secrets.ZA_TOKEN }}
+          # SC's package fetcher reads GIT_TOKEN when it pulls data during the
+          # tests. logiklib's only dependency is siliconcompiler, and the data
+          # it fetches is public, so the repo-scoped GITHUB_TOKEN is enough --
+          # it buys authenticated API rate limits, not private access.
+          GIT_TOKEN: ${{ github.token }}
         run: |
           python3 -m venv .venv
           . .venv/bin/activate

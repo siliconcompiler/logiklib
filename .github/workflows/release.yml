@@ -5,10 +5,25 @@ on:
     types:
       - published
 
+# The repository default is write-all, so without a floor here any job added
+# later inherits every scope. Jobs opt into exactly what they need.
+permissions: {}
+
 jobs:
   forward_artifacts:
     name: Forward artifacts
     runs-on: ubuntu-latest
+
+    # Releases live under the contents scope: read to list/download the
+    # previous one, write to upload onto the new one.
+    permissions:
+      contents: write
+
+    env:
+      # Without this every gh call below exits 4: the CLI does not pick up a
+      # token on its own in Actions. This workflow had never had a successful
+      # run before it was added.
+      GH_TOKEN: ${{ github.token }}
 
     steps:
     - name: Get previous artifacts
