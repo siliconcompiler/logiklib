@@ -42,7 +42,7 @@ jobs:
           name: Packages
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@v1.14.2
+      - uses: pypa/gh-action-pypi-publish@v1.14.3
 
   upload_release:
     name: Add wheels to GitHub release artifacts
